@@ -28,10 +28,7 @@ public class ClientData {
 
     public List<Integer> getNumbers() {
         if(number.contains(Symbol.DEFINED_SYMBOL.getCode())){
-            Matcher matcher = regexMatches("//(.*)\\s(.*)", this.number);
-            this.delimiter = matcher.group(1).replaceAll("(\\]\\[)", "\\|");
-            this.number = matcher.group(2);
-//            System.out.println(this.delimiter.replaceAll("(\\]\\[)", "\\|"));
+            customDelimiterSyntaxAndNumber();
         }
 
         return Arrays.asList(getNumber().split(getDelimiter()))
@@ -39,6 +36,12 @@ public class ClientData {
                 .map(num -> StringUtils.isEmpty(num) ? 0 : Integer.parseInt(num))
                 .filter(num -> num <= 1000)
                 .collect(Collectors.toList());
+    }
+
+    private void customDelimiterSyntaxAndNumber() {
+        Matcher matcher = regexMatches("//(.*)\\s(.*)", this.number);
+        this.delimiter = matcher.group(1).replaceAll("(\\]\\[)", "\\|");
+        this.number = matcher.group(2);
     }
 
     private Matcher regexMatches(String regex, String number) {
