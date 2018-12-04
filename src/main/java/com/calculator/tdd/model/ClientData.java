@@ -50,18 +50,6 @@ public class ClientData {
         return m;
     }
 
-    private String resetNumber() {
-        return number.substring(getNewLineIndex() +1);
-    }
-
-    private int getNewLineIndex() {
-        return number.indexOf("\n");
-    }
-
-    private int length(String code) {
-        return code.length();
-    }
-
     public List<Integer> getNegativeNumbers(List<Integer> numbers) {
         return numbers.stream().filter(num -> num < 0).collect(Collectors.toList());
     }

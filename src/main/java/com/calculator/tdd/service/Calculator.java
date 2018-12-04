@@ -9,7 +9,7 @@ public class Calculator {
         ClientData clientData = new ClientData(number);
         List<Integer> numbers = clientData.getNumbers();
         List<Integer> negativeNumbers = clientData.getNegativeNumbers(numbers);
-        if (negativeNumbers.size() > 0) {
+        if (!negativeNumbers.isEmpty()) {
             throw new CalculatorException(String.format("negatives not allowed %s", negativeNumbers.toString()));
         }
         return numbers.stream().mapToInt(num -> num).sum();
