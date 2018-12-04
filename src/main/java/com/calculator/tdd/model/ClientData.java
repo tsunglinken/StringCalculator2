@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ClientData {
@@ -21,19 +23,36 @@ public class ClientData {
     }
 
     public String getDelimiter() {
-        return String.format("%s|%n",this.delimiter);
+        return String.format("%s|%n", this.delimiter);
     }
 
     public List<Integer> getNumbers() {
         if(number.contains(Symbol.DEFINED_SYMBOL.getCode())){
-            this.delimiter = number.substring(length(Symbol.DEFINED_SYMBOL.getCode()), length(Symbol.DEFINED_SYMBOL.getCode())+1);
-            this.number = number.substring(length(Symbol.DEFINED_SYMBOL.getCode())+2);
+            Matcher matcher = regexMatches("//(.*)\\s(.*)", this.number);
+            this.delimiter = matcher.group(1).replaceAll("(\\]\\[)", "\\|");
+            this.number = matcher.group(2);
+//            System.out.println(this.delimiter.replaceAll("(\\]\\[)", "\\|"));
         }
 
         return Arrays.asList(getNumber().split(getDelimiter()))
                 .stream()
                 .map(num -> StringUtils.isEmpty(num) ? 0 : Integer.parseInt(num))
+                .filter(num -> num <= 1000)
                 .collect(Collectors.toList());
+    }
+
+    private Matcher regexMatches(String regex, String number) {
+        Matcher m = Pattern.compile(regex).matcher(number);
+        m.matches();
+        return m;
+    }
+
+    private String resetNumber() {
+        return number.substring(getNewLineIndex() +1);
+    }
+
+    private int getNewLineIndex() {
+        return number.indexOf("\n");
     }
 
     private int length(String code) {

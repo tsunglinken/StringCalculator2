@@ -49,7 +49,7 @@ public class StringCalculatorTest {
 
     @Test
     public void support_different_delimiters() throws CalculatorException {
-        addShouldBe(3, "//;\n1;2");
+        addShouldBe(3, "//[;]\n1;2");
     }
 
     @Test
@@ -62,6 +62,26 @@ public class StringCalculatorTest {
     public void more_than_one_nagative_number_throws_exception(){
         Exception exception = assertThrows(CalculatorException.class, () -> calculator.add("1\n-1,-2"));
         assertEquals("negatives not allowed [-1, -2]", exception.getMessage());
+    }
+
+    @Test
+    public void number_grater_than_1000_should_be_ignore() throws CalculatorException {
+        addShouldBe(2, "1001,2");
+    }
+
+    @Test
+    public void delimiter_is_any_length() throws CalculatorException {
+        addShouldBe(6, "//[,,,]\n1,,,2,,,3");
+    }
+
+    @Test
+    public void multiple_delimiter() throws CalculatorException {
+        addShouldBe(6, "//[,][;]\n1,2;3");
+    }
+
+    @Test
+    public void multiple_delimiter_with_longer() throws CalculatorException {
+        addShouldBe(12, "//[,,,][;;]\n2,,,4;;;6");
     }
 
     private void addShouldBe(int expected, String number) throws CalculatorException {

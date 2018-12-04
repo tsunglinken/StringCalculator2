@@ -14,7 +14,4 @@ public class Calculator {
         }
         return numbers.stream().mapToInt(num -> num).sum();
     }
-
-
-
 }
